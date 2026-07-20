@@ -115,26 +115,27 @@
                     </div>
                 </div>
 
-                <!-- GRID COM FOTO E QR CODE -->
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- GRID COM FOTO E QR CODE (Responsivo com Aspect Ratio) -->
+                <div class="grid grid-cols-2 gap-3 sm:gap-5 mb-5 items-stretch">
+                    
                     <!-- Foto do Aluno -->
-                    <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-2 shadow-sm border border-slate-200 dark:border-slate-700/80 aspect-square flex items-center justify-center overflow-hidden transition-colors duration-500">
+                    <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-1.5 sm:p-2 shadow-sm border border-slate-200 dark:border-slate-700/80 aspect-[3/4] flex items-center justify-center overflow-hidden transition-colors duration-500">
                         <img id="userPhoto" src="" alt="Foto" class="w-full h-full object-cover rounded-xl shadow-inner">
                     </div>
 
                     <!-- QR Code & Código de Uso Dinâmico -->
-                    <div class="bg-gradient-to-br from-slate-50 to-teal-50/60 dark:from-slate-900 dark:to-teal-950/40 rounded-2xl p-3 shadow-sm border border-teal-200 dark:border-teal-700/50 flex flex-col items-center justify-between text-center transition-colors duration-500 h-44 sm:h-52 relative overflow-hidden">
+                    <div class="bg-gradient-to-br from-slate-50 to-teal-50/60 dark:from-slate-900 dark:to-teal-950/40 rounded-2xl p-2.5 sm:p-4 shadow-sm border border-teal-200 dark:border-teal-700/50 aspect-[3/4] flex flex-col items-center justify-between text-center transition-colors duration-500 relative overflow-hidden">
                         
                         <!-- Luz de fundo sutil decorativa -->
-                        <div class="absolute inset-0 bg-teal-400/5 dark:bg-teal-400/10 blur-xl"></div>
+                        <div class="absolute inset-0 bg-teal-400/5 dark:bg-teal-400/10 blur-xl pointer-events-none"></div>
                         
-                        <!-- Box do QR Code MAIOR -->
-                        <div class="w-4/5 max-w-[200px] aspect-square bg-white border-2 border-teal-100 dark:border-teal-600/50 p-2 rounded-xl flex items-center justify-center relative shadow-sm z-10">
+                        <!-- Box do QR Code flexível (O min-h-0 evita transbordamento e flex-1 preenche o vazio) -->
+                        <div class="w-full flex-1 min-h-0 bg-white border-2 border-teal-100 dark:border-teal-600/50 p-1.5 sm:p-2.5 rounded-xl flex items-center justify-center relative shadow-sm z-10 overflow-hidden mb-2 sm:mb-3">
                             <img id="qrCodeImg" src="" alt="QR Code Dinâmico" class="w-full h-full object-contain transition-opacity duration-300">
                         </div>
                         
-                        <!-- Código Dinâmico Destacado -->
-                        <span id="userCode" class="font-mono text-sm sm:text-base font-black text-teal-700 dark:text-teal-400 tracking-widest z-10 uppercase drop-shadow-sm mt-1"></span>
+                        <!-- Código Dinâmico Destacado (Fixo na parte inferior) -->
+                        <span id="userCode" class="font-mono text-sm sm:text-base font-black text-teal-700 dark:text-teal-400 tracking-widest z-10 uppercase drop-shadow-sm flex-none"></span>
                     </div>
                 </div>
 
@@ -213,7 +214,7 @@
                 foto: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300"
             },
             "70136574173": {
-                nome: "Pedro Vitor",
+                nome: "Pedro Vitor Alexandre",
                 cpf: "701.365.741-73",
                 rg: "60**14 SSP-GO",
                 nascimento: "07/11/1998",
@@ -224,7 +225,7 @@
                 ano: "2026",
                 codigoUso: "92X-BR9P2",
                 entidade: "União Estadual dos Estudantes",
-                foto: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300"
+                foto: "profile.jpg"
             },
             "98765432100": {
                 nome: "Leticia Alves Lima",
@@ -250,7 +251,7 @@
                 nivel: "Superior",
                 validade: "31/03/2027",
                 ano: "2026",
-                codigoUso: "92X-BR9P2",
+                codigoUso: "78G-AM4F7",
                 entidade: "União Estadual dos Estudantes",
                 foto: "nathalia.jpeg"
             },
@@ -303,6 +304,8 @@
             document.getElementById('cardEntityHeader').textContent = usuario.entidade;
             document.getElementById('userFooterEntity').textContent = usuario.entidade;
             document.getElementById('userPhoto').src = usuario.foto;
+
+            document.getElementById('userCode').textContent = usuario.codigoUso;
 
             // --- LÓGICA DO QR CODE DINÂMICO CURTO E SEGURO ---
             let urlAtual = window.location.href.split('?')[0].split('#')[0]; 
