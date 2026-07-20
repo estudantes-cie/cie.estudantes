@@ -129,8 +129,8 @@
                         <div class="absolute inset-0 bg-teal-400/5 dark:bg-teal-400/10 blur-xl"></div>
                         
                         <!-- Box do QR Code MAIOR -->
-                        <div class="w-full h-full max-h-[120px] sm:max-h-[145px] aspect-square bg-white border-2 border-teal-100 dark:border-teal-600/50 p-1.5 rounded-xl flex items-center justify-center relative shadow-sm z-10">
-                            <img id="qrCodeImg" src="" alt="QR Code Dinâmico" class="w-full h-full object-contain">
+                        <div class="w-4/5 max-w-[200px] aspect-square bg-white border-2 border-teal-100 dark:border-teal-600/50 p-2 rounded-xl flex items-center justify-center relative shadow-sm z-10">
+                            <img id="qrCodeImg" src="" alt="QR Code Dinâmico" class="w-full h-full object-contain transition-opacity duration-300">
                         </div>
                         
                         <!-- Código Dinâmico Destacado -->
@@ -305,31 +305,50 @@
             document.getElementById('userPhoto').src = usuario.foto;
 
             // --- LÓGICA DO QR CODE DINÂMICO MASCARADO ---
-    
             let urlAtual = window.location.href.split('?')[0].split('#')[0]; 
             let urlValidacao = urlAtual.endsWith('.html') 
                 ? urlAtual.substring(0, urlAtual.lastIndexOf('/')) + '/validar.html' 
                 : (urlAtual.endsWith('/') ? urlAtual + 'validar.html' : urlAtual + '/validar.html');
 
-            // Monta os parâmetros de forma segura (trata espaços e acentos)
+            // 1. Codificação segura para Base64 (suporta acentos sem dar erro!)
             const params = new URLSearchParams({ 
                 nome: usuario.nome, 
                 cpf: usuario.cpf 
             }).toString();
+            
+            // O pulo do gato para não quebrar com o português: unescape(encodeURIComponent())
+            const payloadCodificado = btoa(unescape(encodeURIComponent(params)));
+            const linkCompleto = `${urlValidacao}?d=${payloadCodificado}`;
 
-            // Encripta os parâmetros em Base64 (Isso esconde o nome e o CPF na tela do celular)
-            const payloadCodificado = btoa(params);
-
-            // O link final fica com cara de token: validar.html?d=bm9tZT1WaXR...
-            const linkComDados = `${urlValidacao}?d=${payloadCodificado}`;
-
-            // Aumentamos o size do QR Code gerado para 250x250 para ter alta resolução
-            const qrCodeApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(linkComDados)}&margin=1`;
-            document.getElementById('qrCodeImg').src = qrCodeApiUrl;
-
-            // Transição visual
+            // Mostra o cartão e deixa o QR Code transparente enquanto gera o link
             document.getElementById('searchView').classList.add('hidden');
             document.getElementById('cardView').classList.remove('hidden');
+            
+            const imgEl = document.getElementById('qrCodeImg');
+            imgEl.style.opacity = "0.1"; // Efeito visual de carregamento
+
+            // 2. Encurtar a URL usando a API gratuita do is.gd (Sem problemas de CORS)
+            const script = document.createElement('script');
+            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+            
+            window[callbackName] = function(data) {
+                // Limpa o script temporário
+                delete window[callbackName];
+                document.body.removeChild(script);
+                
+                // Se a API falhar (ex: você testando localmente fora do GitHub), usa o link original
+                const shortUrl = data.shorturl ? data.shorturl : linkCompleto; 
+                
+                // 3. Gera o QR Code gigante com a URL curta (câmera vai mostrar só is.gd/...)
+                imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(shortUrl)}&margin=1`;
+                
+                // Só mostra o QR Code quando a imagem terminar de carregar da API
+                imgEl.onload = () => imgEl.style.opacity = "1"; 
+            };
+            
+            // Dispara a requisição para a API do encurtador
+            script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(linkCompleto)}&callback=${callbackName}`;
+            document.body.appendChild(script);
         }
 
         function voltarBusca() {

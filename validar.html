@@ -113,12 +113,11 @@
         const successView = document.getElementById('successView');
         const errorView = document.getElementById('errorView');
 
-        // 2. LÓGICA DE VALIDAÇÃO COM DESCRIPTOGRAFIA
+        // 2. LÓGICA DE VALIDAÇÃO COM DESCRIPTOGRAFIA SEGURA
         if (dadoCodificado) {
             try {
-                // Desfaz o Base64
-                const payloadDecodificado = atob(dadoCodificado);
-                // Extrai o Nome e CPF da string desembaralhada
+                // Desfaz a codificação segura (Lida com os acentos perfeitamente)
+                const payloadDecodificado = decodeURIComponent(escape(atob(dadoCodificado)));
                 const dados = new URLSearchParams(payloadDecodificado);
                 
                 const nomeParam = dados.get('nome');
@@ -132,12 +131,12 @@
                     setTimeout(() => {
                         loadingView.classList.add('hidden');
                         successView.classList.remove('hidden');
-                    }, 3000); // Mude para 30000 se quiser exatos 30s
+                    }, 3000); // 3000 = 3 segundos
                 } else {
                     throw new Error("Dados Incompletos");
                 }
             } catch (e) {
-                // Cai aqui se tentarem alterar o link manualmente e quebrarem o Base64
+                // Cai aqui se a leitura falhar
                 loadingView.classList.add('hidden');
                 errorView.classList.remove('hidden');
             }
