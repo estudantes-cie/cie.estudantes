@@ -304,51 +304,61 @@
             document.getElementById('userFooterEntity').textContent = usuario.entidade;
             document.getElementById('userPhoto').src = usuario.foto;
 
-            // --- LÓGICA DO QR CODE DINÂMICO MASCARADO ---
+            // --- LÓGICA DO QR CODE DINÂMICO CURTO E SEGURO ---
             let urlAtual = window.location.href.split('?')[0].split('#')[0]; 
             let urlValidacao = urlAtual.endsWith('.html') 
                 ? urlAtual.substring(0, urlAtual.lastIndexOf('/')) + '/validar.html' 
                 : (urlAtual.endsWith('/') ? urlAtual + 'validar.html' : urlAtual + '/validar.html');
 
-            // 1. Codificação segura para Base64 (suporta acentos sem dar erro!)
+            // 1. Codificação segura para Base64 (suporta acentos)
             const params = new URLSearchParams({ 
                 nome: usuario.nome, 
                 cpf: usuario.cpf 
             }).toString();
             
-            // O pulo do gato para não quebrar com o português: unescape(encodeURIComponent())
             const payloadCodificado = btoa(unescape(encodeURIComponent(params)));
             const linkCompleto = `${urlValidacao}?d=${payloadCodificado}`;
 
-            // Mostra o cartão e deixa o QR Code transparente enquanto gera o link
+            // Mostra o cartão e deixa o QR Code transparente enquanto carrega
             document.getElementById('searchView').classList.add('hidden');
             document.getElementById('cardView').classList.remove('hidden');
             
             const imgEl = document.getElementById('qrCodeImg');
-            imgEl.style.opacity = "0.1"; // Efeito visual de carregamento
+            imgEl.style.opacity = "0.1"; 
 
-            // 2. Encurtar a URL usando a API gratuita do is.gd (Sem problemas de CORS)
-            const script = document.createElement('script');
-            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-            
-            window[callbackName] = function(data) {
-                // Limpa o script temporário
-                delete window[callbackName];
-                document.body.removeChild(script);
+            // 2. VERIFICAÇÃO DE AMBIENTE (Resolve o erro do is.gd)
+            if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                // Se estiver rodando local no PC, pula o encurtador porque a API rejeita links locais
+                imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(linkCompleto)}&margin=1`;
+                imgEl.onload = () => imgEl.style.opacity = "1";
                 
-                // Se a API falhar (ex: você testando localmente fora do GitHub), usa o link original
-                const shortUrl = data.shorturl ? data.shorturl : linkCompleto; 
+            } else {
+                // 3. Encurtador (Ativa apenas quando estiver online no GitHub Pages)
+                const script = document.createElement('script');
+                const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
                 
-                // 3. Gera o QR Code gigante com a URL curta (câmera vai mostrar só is.gd/...)
-                imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(shortUrl)}&margin=1`;
+                // Timeout de Segurança: Se a API do encurtador cair ou der erro, gera o código mesmo assim após 2 segundos
+                const fallbackTimer = setTimeout(() => {
+                    if (window[callbackName]) {
+                        imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(linkCompleto)}&margin=1`;
+                        imgEl.onload = () => imgEl.style.opacity = "1";
+                        delete window[callbackName];
+                    }
+                }, 2000);
+
+                window[callbackName] = function(data) {
+                    clearTimeout(fallbackTimer);
+                    delete window[callbackName];
+                    if(script.parentNode) document.body.removeChild(script);
+                    
+                    const shortUrl = data.shorturl ? data.shorturl : linkCompleto; 
+                    imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(shortUrl)}&margin=1`;
+                    imgEl.onload = () => imgEl.style.opacity = "1"; 
+                };
                 
-                // Só mostra o QR Code quando a imagem terminar de carregar da API
-                imgEl.onload = () => imgEl.style.opacity = "1"; 
-            };
-            
-            // Dispara a requisição para a API do encurtador
-            script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(linkCompleto)}&callback=${callbackName}`;
-            document.body.appendChild(script);
+                script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(linkCompleto)}&callback=${callbackName}`;
+                document.body.appendChild(script);
+            }
         }
 
         function voltarBusca() {
