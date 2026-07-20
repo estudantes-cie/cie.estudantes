@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<!-- Importação da fonte Plus Jakarta Sans -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carteira de Identificação Digital</title>
+    
+    <!-- Importação da fonte Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Customização básica de cores se necessário estender o Tailwind
         tailwind.config = {
+            darkMode: 'class', // Ativa o dark mode via classe no HTML
             theme: {
                 extend: {
                     colors: {
@@ -27,26 +29,31 @@
         }
     </script>
 </head>
-<body class="bg-teal-600 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-between p-4 sm:p-8 antialiased transition-colors duration-300">
+<body class="text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col items-center pt-8 sm:pt-16 p-4 sm:p-8 antialiased transition-colors duration-500 relative overflow-x-hidden">
+
+    <!-- PLANO DE FUNDO FIXO (Com gradientes que mudam entre claro e escuro) -->
+    <div class="fixed inset-0 pointer-events-none -z-10 bg-slate-50 dark:bg-slate-900 transition-colors duration-500"></div>
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 bg-gradient-to-br from-white via-teal-50/50 to-blue-50/50 dark:from-teal-950 dark:via-slate-900 dark:to-slate-900 transition-colors duration-500"></div>
+    <!-- Bolhas decorativas abstratas no fundo -->
+    <div class="fixed -bottom-32 -left-32 w-[500px] h-[500px] bg-teal-400/20 dark:bg-teal-600/10 rounded-full blur-3xl pointer-events-none -z-10 transition-colors duration-500"></div>
+    <div class="fixed top-10 -right-20 w-80 h-80 bg-blue-400/20 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10 transition-colors duration-500"></div>
 
     <!-- HEADER COM CONTROLES -->
-    <header id="headerBar" class="w-full max-w-2xl mx-auto py-2.5 px-5 mb-4 bg-teal-800/40 backdrop-blur-md rounded-full border border-teal-400/30 flex items-center justify-between text-xs text-teal-100 shadow-sm transition-all duration-300">
+    <header id="headerBar" class="w-full max-w-2xl mx-auto py-2.5 px-5 mb-6 bg-white/60 dark:bg-slate-800/40 backdrop-blur-md rounded-full border border-slate-200 dark:border-teal-400/20 flex items-center justify-between text-xs text-slate-600 dark:text-teal-100 shadow-sm transition-all duration-300">
         <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
-            <span class="font-medium tracking-wide">Documento Digital</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
+            <span class="font-bold tracking-wide">Documento Digital</span>
         </div>
         
-        <!-- ÍCONES DE AÇÃO (Tamanho e Modo Claro/Escuro) -->
-        <div class="flex items-center gap-2">
-            <!-- Alternar Tamanho do Card -->
-            <button onclick="toggleTamanho()" title="Alternar Tamanho da Tela" class="p-1.5 hover:bg-teal-700/50 rounded-lg transition-colors flex items-center gap-1">
+        <!-- ÍCONES DE AÇÃO -->
+        <div class="flex items-center gap-1">
+            <button onclick="toggleTamanho()" title="Alternar Tamanho da Tela" class="p-2 hover:bg-slate-200 dark:hover:bg-teal-700/50 rounded-lg transition-colors flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
                 </svg>
             </button>
 
-            <!-- Alternar Modo Claro / Escuro do Card -->
-            <button onclick="toggleModoCard()" title="Modo Claro/Escuro do Cartão" class="p-1.5 hover:bg-teal-700/50 rounded-lg transition-colors">
+            <button onclick="toggleModoCard()" title="Modo Claro/Escuro" class="p-2 hover:bg-slate-200 dark:hover:bg-teal-700/50 rounded-lg transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
                 </svg>
@@ -54,153 +61,139 @@
         </div>
     </header>
 
-    <!-- CONTAINER PRINCIPAL (Com tamanho ideal para simular tela de celular em desktops) -->
-    <main id="mainContainer" class="w-full max-w-2xl my-auto transition-all duration-300"></main>
+    <!-- CONTAINER PRINCIPAL (AGORA ENVOLVE TUDO) -->
+    <main id="mainContainer" class="w-full max-w-2xl transition-all duration-300 z-10 flex-1">
 
         <!-- ================= TELA DE BUSCA ================= -->
-        <div id="searchView" class="bg-slate-800/80 border border-slate-700/60 rounded-3xl p-6 shadow-2xl backdrop-blur-xl">
+        <div id="searchView" class="bg-white/90 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 rounded-3xl p-6 sm:p-8 shadow-xl dark:shadow-2xl backdrop-blur-xl transition-all duration-300">
             <div class="text-center mb-6">
-                <div class="mx-auto h-12 w-12 text-teal-400 bg-teal-500/10 rounded-2xl border border-teal-500/20 flex items-center justify-center mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                <div class="mx-auto h-12 w-12 text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 rounded-2xl border border-teal-100 dark:border-teal-500/20 flex items-center justify-center mb-4 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.603 10.601z" />
                     </svg>
                 </div>
-                <h2 class="text-xl font-bold text-white">Consultar Documento</h2>
-                <p class="text-slate-400 text-xs mt-1">Insira seu CPF para carregar sua carteira digital.</p>
+                <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white">Consultar Documento</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Insira seu CPF para carregar sua carteira digital.</p>
             </div>
 
-            <div class="flex flex-col gap-3">
-                <input type="text" id="cpfInput" placeholder="Digite apenas os 11 números" maxlength="11"
-                       class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-center text-base font-mono outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all">
+            <div class="flex flex-col gap-4">
+                <!-- Adicionado 'onkeypress' para capturar o Enter -->
+                <input type="text" id="cpfInput" placeholder="Digite apenas os 11 números" maxlength="11" onkeypress="if(event.key === 'Enter') buscarCPF()"
+                       class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-center text-lg font-mono outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/20 transition-all shadow-inner">
                 
                 <button onclick="buscarCPF()" 
-                        class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 px-6 rounded-xl text-sm shadow-lg shadow-teal-900/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        class="w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-xl text-base shadow-lg shadow-teal-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                     <span>Acessar Carteira</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
                 </button>
             </div>
 
             <!-- WARNING / ERRO -->
-            <div id="warningMessage" class="hidden mt-4 p-3 bg-red-950/50 border border-red-500/30 text-red-300 rounded-xl text-xs flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0 text-red-400">
+            <div id="warningMessage" class="hidden mt-4 p-4 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-300 rounded-xl text-sm font-medium flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 shrink-0">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                 </svg>
                 <span id="warningText">CPF inválido ou não encontrado.</span>
             </div>
         </div>
 
-
         <!-- ================= TELA DA CARTEIRA DIGITAL ================= -->
         <div id="cardView" class="hidden">
             
-            <div id="cardBox" class="relative bg-white text-slate-900 rounded-3xl p-5 sm:p-7 shadow-2xl border border-slate-200/80 overflow-hidden transition-colors duration-300">
+            <div class="relative bg-white/95 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-3xl p-5 sm:p-7 shadow-2xl backdrop-blur-xl overflow-hidden transition-colors duration-500">
                 
-                <!-- 0,0: HEADER DO CARTÃO (Logos) -->
-                <div class="flex items-center justify-between pb-3 mb-3 border-b border-teal-500/30">
-                    <!-- Logo Principal da Empresa (Item 1) -->
+                <!-- HEADER DO CARTÃO (Logos) -->
+                <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-700/80">
                     <div class="flex items-center gap-2">
-                        <img src="Logotipo-sem-descricao-Principal.png" alt="Logo Principal" class="h-10 w-auto object-contain max-w-[140px]">
+                        <!-- Imagem meramente ilustrativa com base no seu arquivo -->
+                        <img src="Logotipo-sem-descricao-Principal.png" alt="Logo Principal" class="h-10 w-auto object-contain max-w-[140px] dark:brightness-200 dark:contrast-100">
                     </div>
-
-                    <!-- Entidade / Universidade -->
                     <div class="text-right">
-                        <span id="cardEntityHeader" class="text-[10px] font-bold text-teal-100 uppercase tracking-tight block leading-tight">União Estudantil</span>
+                        <span id="cardEntityHeader" class="text-[10px] font-extrabold text-teal-700 dark:text-teal-300 uppercase tracking-widest block leading-tight">União Estudantil</span>
                     </div>
                 </div>
 
-                <!-- 1,0 & 1,1: GRID COM FOTO E QR CODE (Item 3) -->
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    
-                    <!-- 1,0: Foto do Aluno -->
-                    <div class="bg-white rounded-2xl p-1.5 shadow-md border border-slate-100 aspect-square flex items-center justify-center overflow-hidden">
-                        <img id="userPhoto" src="" alt="Foto" class="w-full h-full object-cover rounded-xl">
+                <!-- GRID COM FOTO E QR CODE -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <!-- Foto do Aluno -->
+                    <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-2 shadow-sm border border-slate-200 dark:border-slate-700/80 aspect-square flex items-center justify-center overflow-hidden transition-colors duration-500">
+                        <img id="userPhoto" src="" alt="Foto" class="w-full h-full object-cover rounded-xl shadow-inner">
                     </div>
 
-                    <!-- 1,1: QR Code & Código de Uso -->
-                    <div class="bg-white rounded-2xl p-2 shadow-md border border-slate-100 flex flex-col items-center justify-between text-center aspect-square">
-                        <!-- QR Code Simulado por Divs / Estilo -->
-                        <div class="w-full h-full max-h-[90px] bg-white border border-slate-200 p-1 rounded-lg flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-1 bg-[radial-gradient(#0f172a_35%,transparent_40%)] bg-[size:6px_6px]"></div>
-                            <div class="absolute top-1 left-1 w-4 h-4 border-2 border-slate-900 bg-white"></div>
-                            <div class="absolute top-1 right-1 w-4 h-4 border-2 border-slate-900 bg-white"></div>
-                            <div class="absolute bottom-1 left-1 w-4 h-4 border-2 border-slate-900 bg-white"></div>
+                    <!-- QR Code & Código de Uso -->
+                    <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-3 shadow-sm border border-slate-200 dark:border-slate-700/80 flex flex-col items-center justify-between text-center aspect-square transition-colors duration-500">
+                        <!-- Box do QR Code mantido branco no meio para garantir leitura do scanner -->
+                        <div class="w-full h-full max-h-[120px] bg-white border border-slate-200 dark:border-slate-600 p-1.5 rounded-xl flex items-center justify-center relative overflow-hidden shadow-sm">
+                            <div class="absolute inset-1.5 bg-[radial-gradient(#0f172a_35%,transparent_40%)] bg-[size:6px_6px]"></div>
+                            <div class="absolute top-1.5 left-1.5 w-4 h-4 border-2 border-slate-900 bg-white"></div>
+                            <div class="absolute top-1.5 right-1.5 w-4 h-4 border-2 border-slate-900 bg-white"></div>
+                            <div class="absolute bottom-1.5 left-1.5 w-4 h-4 border-2 border-slate-900 bg-white"></div>
                         </div>
-                        <span id="userCode" class="font-mono text-[11px] font-bold text-slate-700 tracking-wider">78G-AM4F7</span>
+                        <span id="userCode" class="font-mono text-[11px] sm:text-xs font-bold text-slate-700 dark:text-slate-300 tracking-widest mt-2"></span>
                     </div>
                 </div>
 
-                <!-- LINHA INFERIOR: CARTÃO BRANCO COM DADOS PESSOAIS -->
-                <div class="bg-white rounded-2xl p-4 shadow-md text-slate-800 space-y-1.5 relative z-10">
-                    <!-- Nome Completo Em Destaque -->
-                    <h3 id="userName" class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight leading-snug border-b pb-1 border-slate-100">
+                <!-- CARTÃO INFERIOR COM DADOS PESSOAIS -->
+                <div class="bg-slate-50 dark:bg-slate-900/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700/50 shadow-sm text-slate-800 dark:text-slate-200 space-y-2 relative z-10 transition-colors duration-500">
+                    
+                    <h3 id="userName" class="text-lg sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-snug border-b pb-2 border-slate-200 dark:border-slate-700/80">
                         NOME DO ESTUDANTE
                     </h3>
 
-                    <!-- Informações do Aluno -->
-                    <div class="text-xs space-y-1 pt-1">
-                        <p><span class="font-semibold text-slate-500">Inst. de Ensino:</span> <span id="userInst" class="font-bold text-slate-800"></span></p>
-                        <p><span class="font-semibold text-slate-500">Curso:</span> <span id="userCourse" class="font-semibold text-slate-800"></span></p>
-                        <p><span class="font-semibold text-slate-500">Nível de Ensino:</span> <span id="userLevel" class="font-semibold text-slate-800"></span></p>
-                        <p><span class="font-semibold text-slate-500">RG:</span> <span id="userRg" class="font-semibold text-slate-800"></span></p>
-                        <p><span class="font-semibold text-slate-500">Data de Nascimento:</span> <span id="userBirth" class="font-semibold text-slate-800"></span></p>
+                    <div class="text-xs sm:text-sm space-y-1.5 pt-2">
+                        <p><span class="font-bold text-slate-500 dark:text-slate-400">Inst. de Ensino:</span> <span id="userInst" class="font-bold text-slate-800 dark:text-slate-200"></span></p>
+                        <p><span class="font-bold text-slate-500 dark:text-slate-400">Curso:</span> <span id="userCourse" class="font-semibold text-slate-800 dark:text-slate-200"></span></p>
+                        <p><span class="font-bold text-slate-500 dark:text-slate-400">Nível de Ensino:</span> <span id="userLevel" class="font-semibold text-slate-800 dark:text-slate-200"></span></p>
+                        <p><span class="font-bold text-slate-500 dark:text-slate-400">RG:</span> <span id="userRg" class="font-semibold text-slate-800 dark:text-slate-200"></span></p>
+                        <p><span class="font-bold text-slate-500 dark:text-slate-400">Data de Nascimento:</span> <span id="userBirth" class="font-semibold text-slate-800 dark:text-slate-200"></span></p>
                     </div>
 
-                    <!-- Validade e Selo de Ano -->
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-2 mt-2">
+                    <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/80 pt-3 mt-3">
                         <div>
-                            <span class="text-[10px] font-bold uppercase text-slate-400 block leading-none">Validade</span>
-                            <span id="userValidity" class="text-xs font-black text-slate-900">31/03/2027</span>
+                            <span class="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 block leading-none mb-1">Validade Nacional</span>
+                            <span id="userValidity" class="text-sm font-black text-slate-900 dark:text-white"></span>
                         </div>
-                        
-                        <!-- Ano em Destaque -->
-                        <div class="flex items-center gap-1">
-                            <span id="userYear" class="text-2xl font-black text-teal-700 tracking-tighter">2026</span>
+                        <div class="flex items-center">
+                            <span id="userYear" class="text-3xl font-black text-teal-600 dark:text-teal-400 tracking-tighter"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- RODAPÉ DO CARTÃO: Entidade + Botão Certificado + Detalhes Gradiente (Item 2 & 3) -->
-                <div class="mt-4 text-center relative z-10">
-                    <p id="userFooterEntity" class="text-[10px] font-extrabold text-teal-100 tracking-widest uppercase mb-2">
+                <!-- RODAPÉ DO CARTÃO -->
+                <div class="mt-6 text-center relative z-10 flex flex-col items-center gap-3">
+                    <p id="userFooterEntity" class="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 tracking-widest uppercase">
                         UNIÃO ESTUDANTIL
                     </p>
-
-                    <!-- Botão/Selo Certificado (Como no anexo) -->
-                    <div class="inline-flex items-center gap-2 bg-blue-900/80 backdrop-blur-md text-white text-xs font-bold px-5 py-2 rounded-xl border border-blue-400/30 shadow-lg">
+                    <div class="inline-flex items-center gap-2 bg-blue-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl border border-blue-400/30 shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-emerald-400">
                             <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l4-5.625z" clip-rule="evenodd" />
                         </svg>
-                        <span>Certificado</span>
+                        <span>Documento Certificado</span>
                     </div>
                 </div>
-
-                <!-- Detalhes de Formas Geométricas / Gradiente de Fundo (Item 2) -->
-                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600/30 rounded-full blur-xl pointer-events-none"></div>
-                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600/30 rounded-full blur-xl pointer-events-none"></div>
             </div>
 
             <!-- BOTÃO PARA VOLTAR -->
             <button onclick="voltarBusca()" 
-                    class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 border border-slate-700">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    class="mt-6 w-full bg-slate-200 dark:bg-slate-800/80 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3.5 px-4 rounded-2xl text-sm transition-all flex items-center justify-center gap-2 border border-slate-300 dark:border-slate-700 backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
-                <span>Consultar outro CPF</span>
+                <span>Consultar outro documento</span>
             </button>
         </div>
 
     </main>
 
-    <!-- FOOTER MÍNIMO -->
-    <footer class="w-full text-center py-2 text-[10px] text-slate-500">
+    <!-- FOOTER -->
+    <footer class="w-full text-center py-4 text-xs font-semibold text-slate-400 dark:text-slate-500 mt-auto">
         &copy; Sistema de Identificação Estudantil
     </footer>
 
-    <!-- SCRIPT DA BANCO DE DADOS MOCK E LÓGICA -->
+    <!-- SCRIPT -->
     <script>
-        // Base de dados expandida de acordo com a estrutura das imagens de carteirinha estudantil
         const database = {
             "12345678901": {
                 nome: "Vitória Rodrigues M L Castro",
@@ -251,14 +244,12 @@
             const warning = document.getElementById('warningMessage');
             const warningText = document.getElementById('warningText');
             
-            // Validação de formato básico (apenas digitação correta)
             if (cpfInput.length !== 11 || isNaN(cpfInput)) {
                 warningText.textContent = "Por favor, insira um CPF válido contendo apenas os 11 números.";
                 warning.classList.remove('hidden');
                 return;
             }
 
-            // Busca no banco de dados local
             if (database[cpfInput]) {
                 warning.classList.add('hidden');
                 renderizarCartao(database[cpfInput]);
@@ -269,7 +260,6 @@
         }
 
         function renderizarCartao(usuario) {
-            // Mapeamento e alimentação dos dados dinâmicos no cartão utilizando Tailwind
             document.getElementById('userName').textContent = usuario.nome;
             document.getElementById('userInst').textContent = usuario.instituicao;
             document.getElementById('userCourse').textContent = usuario.curso;
@@ -283,38 +273,26 @@
             document.getElementById('userFooterEntity').textContent = usuario.entidade;
             document.getElementById('userPhoto').src = usuario.foto;
 
-            // Transição visual escondendo a busca e exibindo o cartão
             document.getElementById('searchView').classList.add('hidden');
             document.getElementById('cardView').classList.remove('hidden');
         }
 
         function voltarBusca() {
-            // Limpa o formulário e retorna à tela inicial
             document.getElementById('cpfInput').value = "";
-            document.getElementById('warningMessage').classWith = "hidden";
             document.getElementById('warningMessage').classList.add('hidden');
-            
             document.getElementById('searchView').classList.remove('hidden');
             document.getElementById('cardView').classList.add('hidden');
+            
+            // Coloca o foco de volta no input para facilitar a nova digitação
+            setTimeout(() => document.getElementById('cpfInput').focus(), 100);
         }
 
-        // Alterna entre modo claro (fundo branco) e modo escuro (fundo preto/slate) no cartão
+        // Alterna entre modo claro e escuro adicionando/removendo a classe 'dark' no HTML
         function toggleModoCard() {
-            const cardBox = document.getElementById('cardBox');
-            const isDark = cardBox.classList.contains('bg-slate-900');
-
-            if (isDark) {
-                // Mudar para Modo Claro (Branco)
-                cardBox.classList.remove('bg-slate-900', 'text-slate-100', 'border-slate-800');
-                cardBox.classList.add('bg-white', 'text-slate-900', 'border-slate-200/80');
-            } else {
-                // Mudar para Modo Escuro (Preto/Slate)
-                cardBox.classList.remove('bg-white', 'text-slate-900', 'border-slate-200/80');
-                cardBox.classList.add('bg-slate-900', 'text-slate-100', 'border-slate-800');
-            }
+            document.documentElement.classList.toggle('dark');
         }
 
-        // Alterna a largura da tela entre Padrão Maior (60-70%) e Compacto (Celular)
+        // Alterna a largura da tela entre Padrão Maior e Compacto (Celular)
         function toggleTamanho() {
             const container = document.getElementById('mainContainer');
             const header = document.getElementById('headerBar');
